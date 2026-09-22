@@ -28,17 +28,42 @@ esptool.py --chip esp32s3 --port /dev/ttyACM0 --baud 460800 write_flash -z 0x0 E
 
 Firmware dosyasının adını ve seri portu kendi kurulumunuza göre değiştirin.
 
-## 3. Wi-Fi bilgisini `main.py` içinde ayarlayın
+## 3. `main.py` dosyasını yapılandırın
 
-`main.py` dosyasını karta yüklemeden önce dosyanın başındaki Wi-Fi ayarlarını kendi ağınıza göre düzenleyin:
+`main.py` dosyasını karta yüklemeden önce dosyanın başındaki Wi-Fi ve T3 KYS hesap bilgilerini düzenleyin:
 
 ```python
 WIFI_PROFILES = [
-    {"ssid": "WiFi_Adiniz", "password": "WiFi_Parolaniz"}
+    {
+        "ssid": "WiFi_ADI",
+        "password": "WiFi_SIFRE"
+    }
+]
+
+T3_EMAIL = "T3_KYS_KULLANICI_ADI_VEYA_EPOSTA"
+T3_PASSWORD = "T3_KYS_SIFRE"
+```
+
+`WIFI_PROFILES` bölümüne kullanılacak Wi-Fi ağını ve parolasını girin.
+
+Birden fazla ağ kullanılacaksa listeye ek profiller ekleyebilirsiniz:
+
+```python
+WIFI_PROFILES = [
+    {
+        "ssid": "EvWiFi",
+        "password": "EvWiFi_Sifresi"
+    },
+    {
+        "ssid": "TelefonHotspot",
+        "password": "Hotspot_Sifresi"
+    }
 ]
 ```
 
-Wi-Fi bilgilerini doğrudan GitHub'a göndermeyin. Gerçek parolanızı içeren `main.py` dosyasını herkese açık bir repoya yüklemeyin.
+`T3_EMAIL` alanına T3 KYS hesabınızın kullanıcı adı veya e-posta bilgisini, `T3_PASSWORD` alanına hesabınızın parolasını girin.
+
+Bu bilgiler tanımlanmadan uygulama başlatılmaz.
 
 ## 4. Dosyaları karta yükleyin
 
@@ -53,7 +78,7 @@ Dosyaları yükledikten sonra kartı yeniden başlatın.
 
 ## 5. Dashboard'u açın
 
-Kart Wi-Fi ağına bağlandıktan sonra yerel IP adresini bulun ve tarayıcıdan açın:
+Kart Wi-Fi ağına bağlandıktan sonra cihazın yerel IP adresini bulun ve tarayıcıdan açın:
 
 ```text
 http://CIHAZ_IP_ADRESI/
@@ -61,15 +86,23 @@ http://CIHAZ_IP_ADRESI/
 
 İlk açılışta yarışma ayrıntıları alınacağı için başlangıç taraması normalden uzun sürebilir.
 
-## 6. T3 KYS bilgilerini girin
+## 6. Ayarları dashboard üzerinden yönetin
 
-Dashboard açıldıktan sonra ayarlar bölümünden T3 KYS kullanıcı adı/e-posta ve parolanızı girin. Ayarları kaydettikten sonra monitor bağlantıyı kullanarak T3 KYS hesabına giriş yapar.
+Dashboard'un ayarlar bölümünden aşağıdaki değerleri daha sonra değiştirebilirsiniz:
 
-T3 KYS parolanızı GitHub'a, ekran görüntülerine veya hata kayıtlarına eklemeyin.
+- Wi-Fi profilleri
+- T3 KYS kullanıcı adı/e-posta
+- T3 KYS parolası
+- Normal kontrol aralığı
+- Minimum kontrol aralığı
+- Maksimum kontrol aralığı
+
+Ayarlar cihazın yerel Flash dosya sisteminde saklanır.
 
 ## Önemli notlar
 
-- Uygulamayı yalnızca güvendiğiniz yerel ağlarda çalıştırın. Dashboard için ayrı bir web giriş ekranı bulunmaz.
+- Uygulamayı yalnızca güvendiğiniz yerel ağlarda çalıştırın.
+- Dashboard için ayrı bir web giriş ekranı bulunmaz.
 - `main.py` ve `index.html` dosyalarını karta yüklemeden önce dosya adlarının değiştirilmediğinden emin olun.
 - Cihazın yerel Flash belleğine ayar ve uygulama verileri yazılır. Gereksiz yazma işlemlerinden kaçının.
-- Gerçek Wi-Fi ve T3 KYS bilgilerini içeren dosyaları herkese açık depoya göndermeyin.
+- T3 KYS hesap bilgilerini ve Wi-Fi bilgilerini güvenli tutun.
