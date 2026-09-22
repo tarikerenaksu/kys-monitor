@@ -12,7 +12,7 @@ ESP32-S3 ve MicroPython üzerinde çalışan, T3 KYS başvurularını periyodik 
 - Değişiklik geçmişi ve okunmamış değişiklik takibi
 - Dahili RGB LED ile çalışma durumu göstergesi
 - Adaptif kontrol aralığı
-- ESP32 üzerinde çalışan bağımlılığı düşük HTTP dashboard
+- ESP32 üzerinde çalışan, düşük bağımlılıklı HTTP dashboard
 - Yarışma ayrıntıları ve sertifika görünümü
 - Dashboard üzerinden Wi-Fi, hesap ve kontrol ayarlarını değiştirme
 - Verilerin cihazın yerel Flash dosya sisteminde tutulması
@@ -45,21 +45,31 @@ esptool.py --chip esp32s3 --port /dev/ttyACM0 --baud 460800 write_flash -z 0x0 E
 
 Firmware dosyasının adını ve seri portu kendi kurulumuna göre değiştir.
 
-### 3. Wi-Fi bilgilerini ayarla
+### 3. `main.py` dosyasını yapılandır
 
-`main.py` dosyasını karta yüklemeden önce dosyanın başındaki Wi-Fi ayarlarını kendi ağına göre doldur:
+`main.py` dosyasını karta yüklemeden önce dosyanın başındaki Wi-Fi ve T3 KYS hesap ayarlarını kendi bilgilerine göre doldur:
 
 ```python
 WIFI_PROFILES = [
-    {"ssid": "WiFi_Adin", "password": "WiFi_Parolan"}
+    {
+        "ssid": "WiFi_ADI",
+        "password": "WiFi_SIFRE"
+    }
 ]
+
+T3_EMAIL = "T3_KYS_KULLANICI_ADI_VEYA_EPOSTA"
+T3_PASSWORD = "T3_KYS_SIFRE"
 ```
 
-Gerçek Wi-Fi parolanı herkese açık GitHub deposuna gönderme.
+`WIFI_PROFILES` bölümünde ESP32-S3'ün bağlanacağı Wi-Fi ağını tanımla.
+
+Birden fazla Wi-Fi ağı kullanılacaksa `WIFI_PROFILES` içine birden fazla profil eklenebilir.
+
+`T3_EMAIL` alanına T3 KYS hesabının kullanıcı adı veya e-posta bilgisini, `T3_PASSWORD` alanına hesabın parolasını yaz.
 
 ### 4. Dosyaları karta yükle
 
-ESP32-S3'e şu iki dosyayı **aynı dosya adlarıyla** yükle:
+ESP32-S3'e aşağıdaki iki dosyayı **aynı dosya adlarıyla** yükle:
 
 ```text
 main.py
@@ -78,13 +88,11 @@ http://CIHAZ_IP_ADRESI/
 
 İlk açılışta yarışma ayrıntıları alınacağı için başlangıç taraması normalden uzun sürebilir.
 
-### 6. T3 KYS bilgilerini gir
+### 6. Dashboard üzerinden ayarları değiştir
 
-Dashboard açıldıktan sonra ayarlar bölümünden T3 KYS kullanıcı adı/e-posta ve parolanı girip kaydet.
+Dashboard'un ayarlar bölümünden Wi-Fi profillerini, T3 KYS hesap bilgilerini ve kontrol aralıklarını daha sonra değiştirebilirsin.
 
-T3 KYS parolanı GitHub'a, ekran görüntülerine veya hata kayıtlarına ekleme.
-
-> Ayrıntılı kurulum için [`docs/INSTALL.md`](docs/INSTALL.md) dosyasına bakabilirsin.
+Ayrıntılı kurulum için [`docs/INSTALL.md`](docs/INSTALL.md) dosyasına bakabilirsin.
 
 ## Yapılandırma
 
@@ -112,7 +120,7 @@ t3_competition_details.json
 t3_certificates.json
 ```
 
-Bu dosyalar kullanıcıya ve cihaza özgü bilgiler içerebilir. Git deposuna dahil edilmemelidir.
+Bu dosyalar cihazın yerel durumunu, başvuru verilerini ve uygulama ayarlarını içerir.
 
 ## Dashboard
 
@@ -125,10 +133,6 @@ Arayüz doğrudan ESP32 üzerinde servis edilir; ayrı bir Flask, Selenium veya 
 #### Koyu tema — Yarışmalar
 
 ![Yarışmalar ekranı](docs/screenshots/dashboard-dark.jpg)
-
-#### Açık tema — Mobil görünüm
-
-![Mobil açık tema görünümü](docs/screenshots/dashboard-light-mobile.jpg)
 
 #### Koyu tema — Değişiklikler
 
@@ -148,7 +152,7 @@ Okunmamış değişiklik göstergesi diğer durumların üzerinde önceliğe sah
 
 ## Donanım uyarısı
 
-Dahili RGB LED sürücüsü geliştirme sırasında kart üzerinde özel olarak doğrulanmıştır. Buna rağmen farklı kart revizyonları, LED bileşenleri, zamanlamalar veya elektriksel koşullar farklı sonuç verebilir.
+Dahili RGB LED sürücüsü geliştirme sırasında kart üzerinde özel olarak doğrulanmıştır. Buna rağmen farklı kart revizyonları, LED bileşenleri, zamanlamalar veya elektriksel koşullar farklı sonuçlar verebilir.
 
 **RGB LED bölümünün yanlış veya uyumsuz kullanımı donanıma zarar verebilir.** LED'in çalışması kritik değilse LED işlevini kullanmamak daha güvenli olabilir.
 
@@ -166,8 +170,8 @@ Dashboard yerel ağ üzerinde HTTP port 80'de çalışır ve uygulama katmanınd
 
 - Cihazı yalnızca güvendiğiniz ağlarda kullanın.
 - Port 80'i internete açmayın.
-- Gerçek T3 KYS ve Wi-Fi bilgilerini GitHub'a yüklemeyin.
-- Cihazın Flash içeriğine fiziksel/yazılımsal erişimi olan kişilerin kayıtlı bilgileri okuyabileceğini varsayın.
+- T3 KYS ve Wi-Fi hesap bilgilerini güvenli tutun.
+- Cihazın Flash içeriğine fiziksel veya yazılımsal erişimi olan kişilerin kayıtlı bilgileri okuyabileceğini varsayın.
 
 Ayrıntılı güvenlik bilgileri [`SECURITY.md`](SECURITY.md) dosyasındadır.
 
@@ -196,7 +200,6 @@ Ayrıntılı güvenlik bilgileri [`SECURITY.md`](SECURITY.md) dosyasındadır.
     ├── CODE_REVIEW.md
     └── screenshots/
         ├── dashboard-dark.jpg
-        ├── dashboard-light-mobile.jpg
         └── changes-dark.jpg
 ```
 
