@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local/editor files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Device/user data - never commit these
+t3_settings.json
+t3_state.json
+t3_changes.json
+t3_system.json
+t3_competitions.json
+t3_applications.json
+t3_competition_details.json
+t3_certificates.json
+
+# Local firmware/build artifacts
+*.bin
+*.elf
