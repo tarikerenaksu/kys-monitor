@@ -1,8 +1,10 @@
-# KYS Monitor
+# KYS Monitor — Unofficial
 
 ESP32-S3 ve MicroPython üzerinde çalışan, T3 KYS başvurularını periyodik olarak kontrol eden ve sonuçları yerel bir web arayüzünde gösteren hafif bir izleme uygulaması.
 
-> **Not:** Bu proje T3 KYS veya TEKNOFEST tarafından yayımlanmış resmî bir yazılım değildir. T3 KYS'nin web arayüzü ve API davranışlarında yapılabilecek değişiklikler uygulamanın çalışmasını etkileyebilir.
+> **Unofficial community project. Not affiliated with or endorsed by T3 KYS or TEKNOFEST.**
+>
+> Bu proje T3 KYS veya TEKNOFEST tarafından yayımlanmış resmî bir yazılım değildir. T3 KYS'nin web arayüzü ve API davranışlarında yapılabilecek değişiklikler uygulamanın çalışmasını etkileyebilir.
 
 ## Özellikler
 
@@ -47,7 +49,9 @@ Firmware dosyasının adını ve seri portu kendi kurulumuna göre değiştir.
 
 ### 3. `main.py` dosyasını yapılandır
 
-`main.py` dosyasını karta yüklemeden önce dosyanın başındaki Wi-Fi ve T3 KYS hesap ayarlarını kendi bilgilerine göre doldur:
+`main.py` dosyasını karta yüklemeden önce hem **Wi-Fi bilgilerini** hem de **T3 KYS kullanıcı adı/e-posta ve parolasını** yapılandırmalısın.
+
+Ayarlar dosyanın en üst satırlarında olmak zorunda değildir. `main.py` içinde **`AYARLAR`** başlıklı bölümü bul ve aşağıdaki alanları kendi bilgilerine göre doldur:
 
 ```python
 WIFI_PROFILES = [
@@ -66,6 +70,8 @@ T3_PASSWORD = "T3_KYS_SIFRE"
 Birden fazla Wi-Fi ağı kullanılacaksa `WIFI_PROFILES` içine birden fazla profil eklenebilir.
 
 `T3_EMAIL` alanına T3 KYS hesabının kullanıcı adı veya e-posta bilgisini, `T3_PASSWORD` alanına hesabın parolasını yaz.
+
+**Bu bilgiler yapılandırılmadan uygulama normal şekilde başlatılamaz.**
 
 ### 4. Dosyaları karta yükle
 
@@ -150,11 +156,13 @@ Arayüz doğrudan ESP32 üzerinde servis edilir; ayrı bir Flask, Selenium veya 
 
 Okunmamış değişiklik göstergesi diğer durumların üzerinde önceliğe sahiptir.
 
-## Donanım uyarısı
+## Donanım ve RGB LED uyarısı
 
-Dahili RGB LED sürücüsü geliştirme sırasında kart üzerinde özel olarak doğrulanmıştır. Buna rağmen farklı kart revizyonları, LED bileşenleri, zamanlamalar veya elektriksel koşullar farklı sonuçlar verebilir.
+**DİKKAT: Bu yazılım ESP32-S3 üzerindeki dahili RGB LED'i doğrudan sürer. Yanlış GPIO seçimi, uyumsuz kart/LED donanımı, hatalı bağlantı, uygun olmayan zamanlama veya yazılımın farklı bir donanım üzerinde kullanılması LED'e, ESP32-S3'e veya ilişkili donanıma zarar verebilir.**
 
-**RGB LED bölümünün yanlış veya uyumsuz kullanımı donanıma zarar verebilir.** LED'in çalışması kritik değilse LED işlevini kullanmamak daha güvenli olabilir.
+LED sürücüsü geliştirme sırasında kullanılan kart üzerinde doğrulanmıştır. Farklı kart revizyonlarında veya farklı ESP32-S3 kartlarında aynı davranış garanti edilmez.
+
+**RGB LED kullanımı sonucunda oluşabilecek LED arızası, ESP32-S3 hasarı, bağlı donanım hasarı veya başka herhangi bir donanım zararı için proje sahibi herhangi bir sorumluluk kabul etmez. Donanım üzerinde bu yazılımı kullanmak kullanıcının kendi sorumluluğundadır.**
 
 ## Flash kullanımı
 
@@ -223,6 +231,12 @@ Bu proje **MIT License** ile lisanslanmıştır. Ayrıntılar için [`LICENSE`](
 
 Bu proje bağımsız olarak geliştirilmiştir. T3 Vakfı tarafından yazılımın veya deponun kaldırılması talep edilirse geliştirici olarak ilgili dosyaları veya depoyu kaldırırım.
 
-## Sorumluluk
+## Sorumluluk reddi
 
-Yazılım garanti verilmeden, mevcut hâliyle sunulmaktadır. Donanım hasarı, Flash aşınması, veri kaybı, hesap sorunları, ağ sorunları veya hizmet kesintilerinden proje sahibi sorumlu değildir. Yazılımın kullanımı kullanıcının kendi sorumluluğundadır.
+Yazılım **herhangi bir garanti, taahhüt veya kullanım sonucu garantisi verilmeden, mevcut hâliyle ("as is")** sunulmaktadır.
+
+Proje sahibi; yazılımın kullanımından, çalıştırılmasından, değiştirilmesinden veya başka bir yazılım ya da donanımla birlikte kullanılmasından doğabilecek **doğrudan veya dolaylı herhangi bir maddi veya manevi zarardan, donanım arızasından, LED veya ESP32-S3 hasarından, veri kaybından, Flash dosya sistemi bozulmasından, hesap veya kimlik bilgisi sorunlarından, ağ sorunlarından, hizmet kesintilerinden, yanlış veya eksik verilerden ya da üçüncü taraf hizmetlerde meydana gelen değişikliklerden sorumlu değildir.**
+
+Yazılımın kullanımı ve ortaya çıkabilecek sonuçların değerlendirilmesi tamamen kullanıcının sorumluluğundadır.
+
+Bu metin projenin kullanım koşullarını açıklamak amacıyla hazırlanmıştır ve belirli bir hukuk sisteminde hukuki danışmanlık niteliğinde değildir.
